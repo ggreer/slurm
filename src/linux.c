@@ -30,6 +30,26 @@ int checkinterface(void)
 	return interfacefound;
 }
 
+int set_default_interface(void) {
+    struct if_nameindex *ifs;
+    int rv = 1;
+    int i;
+
+    if ((ifs = if_nameindex()) == NULL) {
+        return 1;
+    }
+    for (i = 0; ifs[i].if_index; i++) {
+        // SUPER HACKY
+        if (strcmp(ifs[i].if_name, "lo") != 0) {
+            strncpy((char *)ifdata.if_name, (char *)ifs[i].if_name, (size_t)sizeof(ifdata.if_name));
+            rv = 0;
+            break;
+        }
+    }
+    if_freenameindex(ifs);
+    return rv;
+}
+
 /******************************************************************************
  *
  * get_stat()

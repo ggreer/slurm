@@ -1301,6 +1301,11 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifdef _HAVE_SET_DEFAULT_INTERFACE
+    if (strlen(ifdata.if_name) == 0 && set_default_interface() == 0) {
+        validinterface = 1;
+    }
+#endif
 	if (strlen(ifdata.if_name) == 0)
 		usage(1, argv);
 
